@@ -2,6 +2,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
+    //cooldowns:5,
     category: 'utility',
     data: new SlashCommandBuilder()
         .setName('ping')
