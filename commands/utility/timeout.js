@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const logChannels = require('../../logChannels.json');
 
 module.exports = {
     category: 'utility',
@@ -16,7 +17,8 @@ module.exports = {
         .addStringOption(option =>
             option.setName('reason')
                 .setDescription('The reason for the timeout.')
-                .setRequired(true)),
+                .setRequired(true))
+    .setDefaultMemberPermissions(false),
     async execute(interaction) {
         await  interaction.deferReply({});
         const user = interaction.options.getUser('user');
@@ -31,9 +33,13 @@ module.exports = {
             return interaction.editReply('Duration is too long. Maximum is 28 days.');
         }
         try {
-            console.log(`Duration: ${duration}`);
-            await interaction.editReply(`Timing out user ${user.tag} for ${duration/1000} seconds . Reason: ${reason}`);
+            await interaction.editReply("Done :white_check_mark: ");
             await member.timeout(duration); // convert minutes to milliseconds
+
+            // Get the log channel
+            const logChannel = interaction.guild.channels.cache.get(logChannels[interaction.guild.id.toString()]);
+            // Send a message to the log channel
+            logChannel.send(`User ${user.tag} has been timed out for ${duration/1000} seconds. Reason: ${reason}`);
         } catch (error) {
             console.error(error);
             await interaction.editReply( 'There was an error while trying to time out this user!');
