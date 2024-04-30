@@ -17,8 +17,8 @@ module.exports = {
         .addStringOption(option =>
             option.setName('reason')
                 .setDescription('The reason for the timeout.')
-                .setRequired(true))
-    .setDefaultMemberPermissions(false),
+                .setRequired(true)),
+    // .setDefaultMemberPermissions(false),
     async execute(interaction) {
         await  interaction.deferReply({});
         const user = interaction.options.getUser('user');
