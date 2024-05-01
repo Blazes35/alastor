@@ -11,7 +11,7 @@ module.exports = {
             .setName('user')
             .setDescription('The user to time out.')
             .setRequired(true))
-        .addIntegerOption(option => option
+        .addStringOption(option => option
             .setName('duration')
             .setDescription('The duration of the timeout in seconds.')
             .setRequired(true))
@@ -24,8 +24,34 @@ module.exports = {
         const {options, guild, user} = interaction;
 
         const target = await options.getMember('user');
-        const duration = options.getInteger('duration') * 1000;
+        const durationOption = options.getString('duration').split(' ');
         let reason = options.getString('reason') ?? 'No reason provided';
+        let duration=0;
+        console.log(durationOption);
+        for (const time in durationOption) {
+            switch (time) {
+                case /(\d+)w/:
+                    duration += parseInt(time) *7*24*60*60;
+                    break;
+
+                case /(\d+)d/:
+                    duration += parseInt(time) *24*60*60;
+                    break;
+
+                case /(\d+)h/:
+                    duration += parseInt(time) *60*60;
+                    break;
+
+                case /(\d+)m/:
+                    duration += parseInt(time) *60;
+                    break;
+
+                default:
+                    duration += parseInt(time);
+                    break;
+            }
+        }
+        duration*=1000;
 
         if (user.id === target.id) return interaction.editReply("You cannot time out yourself.");
         if (!target.moderatable) return interaction.editReply("I can't time out this member.");
@@ -52,6 +78,7 @@ module.exports = {
         let embed = new EmbedBuilder()
             .setColor('ff0000')
             .setAuthor({name: target.user.tag, iconURL: target.user.displayAvatarURL()})
+            .setThumbnail(target.user.displayAvatarURL())
             .setTitle('New Infraction')
             .setDescription(`Issued by ${user.tag}`)
             .addFields(
@@ -81,9 +108,6 @@ module.exports = {
                     inline: true
                 }
             );
-
-
-
 
         try{
             await target.timeout(duration, reason);
