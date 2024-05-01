@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const logChannels = require('../../logChannels.json');
 
 module.exports = {
@@ -18,14 +18,15 @@ module.exports = {
             option.setName('reason')
                 .setDescription('The reason for the timeout.')
                 .setRequired(true)),
-    // .setDefaultMemberPermissions(false),
     async execute(interaction) {
         await  interaction.deferReply({});
         const user = interaction.options.getUser('user');
         const duration = interaction.options.getInteger('duration')*1000;
         const reason = interaction.options.getString('reason') || 'No reason provided';
         const member = interaction.guild.members.cache.get(user.id);
-
+        if (!interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers)) {
+            return interaction.editReply('You do not have permission to time out this user.');
+        }
         if (!member) {
             return interaction.editReply('User is not in this server.');
         }
