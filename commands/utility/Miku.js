@@ -3,6 +3,7 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     category: 'utility',
+    cooldown: 3600*24,
     data: new SlashCommandBuilder()
         .setName('miku')
         .setDescription('Replies with Pong!'),

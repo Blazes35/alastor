@@ -1,14 +1,16 @@
-const {SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField, EmbedBuilder} = require('discord.js');
+// noinspection JSUnresolvedReference,JSUnusedLocalSymbols
+
+const {SlashCommandBuilder, PermissionsBitField, EmbedBuilder, default_member_permissions } = require('discord.js');
+const { PermissionFlagsBits } = require('discord-api-types/v10');
+
 const logChannels = require('../../logChannels.json');
 const autoEmbedBuilder = require('../../events/autoEmbedBuilder').createInfractionEmbed;
 
-// noinspection JSUnresolvedReference
 module.exports = {
     category: 'utility',
     data: new SlashCommandBuilder()
         .setName('timeout')
         .setDescription('Times out a user.')
-        // @ts-ignore
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
         .addUserOption(option => option
             .setName('user')
@@ -50,9 +52,9 @@ module.exports = {
             }
         }
 
+        if (duration < 5 || duration > 2.4192e6) return interaction.editReply('Duration must be between 5 seconds and 28 days.');
         if (user.id === target.id) return interaction.editReply("You cannot time out yourself.");
         if (!target.moderatable) return interaction.editReply("I can't time out this member.");
-        if (duration < 5 || duration > 2.4192e6) return interaction.editReply('Duration must be between 5 seconds and 28 days.');
 
         const senderRoles = interaction.member.roles.cache.map(r => r);
         const targetPerms = target.permissions;
