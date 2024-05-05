@@ -1,7 +1,7 @@
 const {SlashCommandBuilder} = require('discord.js');
 
 module.exports = {
-    cooldown: 300,
+    // cooldown: 300,
     category: 'utility',
     data: new SlashCommandBuilder()
         .setName('bonk')
@@ -12,11 +12,14 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
         const target = interaction.options.getMember('user');
-        const emoji = interaction.client.emojis.cache.find(e => e.name === 'bonk');
-        if (emoji) {
-            await interaction.reply({content: `<@${target.user.id}> ${emoji}`});
+        const stickerName = 'bonk'; // replace with your sticker name
+        const stickers = await interaction.guild.stickers.fetch();
+        const sticker = stickers.find(s => s.name === stickerName);
+        console.log(sticker);
+        if (sticker) {
+            await interaction.reply({content: `<@${target.user.id}>`, stickers: [sticker.id]});
         } else {
-            console.log('Emoji not found');
+            console.log('Sticker not found');
         }
     }
 };

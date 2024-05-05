@@ -2,7 +2,6 @@
 
 const {SlashCommandBuilder, PermissionsBitField, EmbedBuilder, default_member_permissions } = require('discord.js');
 const { PermissionFlagsBits } = require('discord-api-types/v10');
-
 const logChannels = require('../../logChannels.json');
 const autoEmbedBuilder = require('../../events/autoEmbedBuilder').createInfractionEmbed;
 
