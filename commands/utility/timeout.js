@@ -1,5 +1,4 @@
 // noinspection JSUnresolvedReference,JSUnusedLocalSymbols
-
 const {
     SlashCommandBuilder,
     ActionRowBuilder,
@@ -9,9 +8,12 @@ const {
     EmbedBuilder,
     default_member_permissions
 } = require('discord.js');
+
+
 const {PermissionFlagsBits} = require('discord-api-types/v10');
 const logChannels = require('../../logChannels.json');
 const autoEmbedBuilder = require('../../events/autoEmbedBuilder').createInfractionEmbed;
+const autoRowBuilder = require('../../events/autoRowBuilder').createComponentRow;
 
 module.exports = {
     category: 'utility',
@@ -84,18 +86,10 @@ module.exports = {
                 return interaction.editReply("You do not have permission to time out this user.");
         }
 
-        const confirm = new ButtonBuilder()
-            .setCustomId('confirm')
-            .setLabel('Confirm timeout')
-            .setStyle(ButtonStyle.Danger);
-
-        const cancel = new ButtonBuilder()
-            .setCustomId('cancel')
-            .setLabel('Cancel')
-            .setStyle(ButtonStyle.Secondary);
-
-        const row = new ActionRowBuilder()
-            .addComponents(cancel, confirm);
+        const row = autoRowBuilder([
+            {customId: 'cancel', label: 'Cancel', style: ButtonStyle.Secondary},
+            {customId: 'confirm', label: 'Confirm timeout', style: ButtonStyle.Danger}
+        ]);
 
         const response = await interaction.editReply({
             silent: true,
