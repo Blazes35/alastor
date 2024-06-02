@@ -94,7 +94,7 @@ module.exports = {
         const response = await interaction.editReply({
             silent: true,
             content: `Are you sure you want to ban ${target} for reason: ${reason}?`,
-            components: [row],
+            components: [row]
         });
 
         const collectorFilter = i => i.user.id === interaction.user.id;
@@ -106,7 +106,7 @@ module.exports = {
 
                 duration *= 1000;
                 await target.timeout(duration, reason);
-                await interaction.editReply({silent: true, embeds: [embed], components: []});
+                await confirmation.update({silent: true, embeds: [embed], components: []});
 
 
                 // Get the log channel and set the embed recap
