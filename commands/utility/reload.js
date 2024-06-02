@@ -1,5 +1,6 @@
 const {SlashCommandBuilder, ButtonStyle} = require('discord.js');
 const logChannels = require("../../logChannels.json");
+const {PermissionFlagsBits} = require("discord-api-types/v10");
 const rowBuilder = require('../../events/autoRowBuilder').createComponentRow;
 
 
@@ -8,6 +9,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('reload')
         .setDescription('Reloads a command.')
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addStringOption(option =>
             option.setName('command')
                 .setDescription('The command to reload.')
