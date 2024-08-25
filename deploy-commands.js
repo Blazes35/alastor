@@ -1,6 +1,6 @@
 // deploy-commands.js
 const { REST, Routes } = require('discord.js');
-const { clientId, token } = require('./config.json');
+const { clientId, DiscordToken } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -23,7 +23,7 @@ const deployCommands = async () => {
         }
     }
 
-    const rest = new REST().setToken(token);
+    const rest = new REST().setToken(DiscordToken);
 
     try {
         console.log(`Started refreshing ${commands.length} application (/) commands.`);

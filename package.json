@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "deepl-node": "^1.13.1",
     "discord-api-types": "^0.37.83",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2",
     "undici": "^6.15.0",
     "uuid": "^9.0.1"
   }
