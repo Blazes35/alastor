@@ -25,11 +25,13 @@ module.exports = {
             .setRequired(false)
         ),
     async execute(interaction) {
-        await interaction.deferReply({ephemeral: true});
-        const text = interaction.options.get('text')
-        const source = interaction.options.get('source')??null
-        const target = interaction.options.get('target')
-        let formality = interaction.options.get('formality')
+        await interaction.deferReply();
+        const text = interaction.options.get('text').value;
+        const sourceOption = interaction.options.get('source');
+        const source = sourceOption? sourceOption.value : null;
+        const target = interaction.options.get('target').value;
+        const formalityOption = interaction.options.get('formality');
+        let formality = formalityOption ? formalityOption.value : null;
 
         switch (formality) {
             case 'formal':
@@ -44,7 +46,6 @@ module.exports = {
 
         const translator = new deepl.Translator(DeepLToken);
         const result = await translator.translateText(text, source, target, formality);
-        console.log(result.text); // Bonjour, le monde !
-        interaction.editReply({ephemeral: false, content: result.text});
+        interaction.editReply({content:'> '+result.text});
     },
 };

@@ -16,7 +16,6 @@ module.exports = {
             results.forEach(result => {
                 text += `Language: ${result.name} - Code: ${result.code}.\n`;
             });
-            console.log(text);
             interaction.editReply({ephemeral: false, content: text});
         })
     },
