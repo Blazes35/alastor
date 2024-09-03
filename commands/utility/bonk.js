@@ -1,8 +1,10 @@
 const {SlashCommandBuilder} = require('discord.js');
+const path = require("path");
+const dirname = path.basename(__dirname)+' ';
 
 module.exports = {
     // cooldown: 300,
-    category: 'utility',
+    category: dirname,
     data: new SlashCommandBuilder()
         .setName('bonk')
         .setDescription('Replies with Pong!')

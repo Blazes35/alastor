@@ -1,11 +1,13 @@
 const {SlashCommandBuilder, ButtonStyle} = require('discord.js');
 const logChannels = require("../../logChannels.json");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
+const path = require("path");
+const dirname = path.basename(__dirname)+' ';
 const rowBuilder = require('../../events/autoRowBuilder').createComponentRow;
 
 
 module.exports = {
-    category: 'utility',
+    category: dirname,
     data: new SlashCommandBuilder()
         .setName('reload')
         .setDescription('Reloads a command.')
