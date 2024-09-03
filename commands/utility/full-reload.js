@@ -3,9 +3,11 @@ const { SlashCommandBuilder, ButtonStyle} = require('discord.js');
 const deployCommands = require('../../deploy-commands.js');
 const {PermissionFlagsBits} = require("discord-api-types/v10");
 const {createComponentRow: rowBuilder} = require("../../events/autoRowBuilder");
+const path = require("path");
+const dirname = path.basename(__dirname)+' ';
 
 module.exports = {
-    category: 'utility',
+    category: dirname,
     data: new SlashCommandBuilder()
         .setName('full-reload')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)

@@ -1,8 +1,10 @@
 
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const path = require("path");
+const dirname = path.basename(__dirname)+' ';
 
 module.exports = {
-    category: 'utility',
+    category: dirname,
     cooldown: 3600*24,
     data: new SlashCommandBuilder()
         .setName('miku')

@@ -11,11 +11,13 @@ const {
 
 
 const {PermissionFlagsBits} = require('discord-api-types/v10');
+const path = require("path");
 const autoEmbedBuilder = require('../../events/autoEmbedBuilder').createInfractionEmbed;
 const autoRowBuilder = require('../../events/autoRowBuilder').createComponentRow;
+const dirname = path.basename(__dirname) + '';
 
 module.exports = {
-    category: 'utility',
+    category: dirname,
     data: new SlashCommandBuilder()
         .setName('reaction-role')
         .setDescription('create a message with reaction roles')

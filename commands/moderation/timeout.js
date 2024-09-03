@@ -1,22 +1,14 @@
 // noinspection JSUnresolvedReference,JSUnusedLocalSymbols
-const {
-    SlashCommandBuilder,
-    ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle,
-    PermissionsBitField,
-    EmbedBuilder,
-    default_member_permissions
-} = require('discord.js');
-
-
+const {SlashCommandBuilder,ActionRowBuilder,ButtonBuilder,ButtonStyle,PermissionsBitField,EmbedBuilder,default_member_permissions} = require('discord.js');
 const {PermissionFlagsBits} = require('discord-api-types/v10');
 const logChannels = require('../../logChannels.json');
+const path = require("path");
+const dirname = path.basename(__dirname)+' ';
 const autoEmbedBuilder = require('../../events/autoEmbedBuilder').createInfractionEmbed;
 const autoRowBuilder = require('../../events/autoRowBuilder').createComponentRow;
 
 module.exports = {
-    category: 'utility',
+    category: dirname,
     data: new SlashCommandBuilder()
         .setName('timeout')
         .setDescription('Times out a user.')

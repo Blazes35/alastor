@@ -1,6 +1,9 @@
 const { SlashCommandBuilder } = require('discord.js');
+const path = require("path");
+const dirname = path.basename(__dirname)+' ';
 
 module.exports = {
+    category:dirname,
     data: new SlashCommandBuilder()
         .setName('info-command')
         .setDescription('Provides information about a specific command.')
