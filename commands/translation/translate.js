@@ -1,100 +1,128 @@
-// const { DeepLToken } = require('../../config.json');
-// const deepl = require('deepl-node');
-// const {SlashCommandBuilder} = require("discord.js");
-//
-// module.exports = {
-//     data: new SlashCommandBuilder()
-//         .setName('translation')
-//         .setDescription('translation commands')
-//         .addSubcommand(subCommand => subCommand
-//             .setName('translate')
-//             .setDescription('Get the current character usage of DeepL\' API')
-//             .addStringOption(option => option
-//                 .setName('text')
-//                 .setDescription('The text to translate.')
-//                 .setRequired(true))
-//             .addStringOption(option => option
-//                 .setName('target')
-//                 .setDescription('The target language.')
-//                 .setRequired(true))
-//             .addStringOption(option => option
-//                 .setName('source')
-//                 .setDescription('The source language.')
-//                 .setRequired(false))
-//             .addStringOption(option => option
-//                 .setName('formality')
-//                 .setDescription('Choose the formality of the translation (formal/informal).')
-//                 .setRequired(false)))
-//         .addSubcommand(subCommand => subCommand
-//             .setName('quota')
-//             .setDescription('Get the current character usage of DeepL\' API'))
-//         .addSubcommandGroup(subCommandGroup => subCommandGroup
-//             .setName('languages')
-//             .setDescription('Get target and source languages')
-//             .addSubcommand(subCommand => subCommand
-//                 .setName('source_list')
-//                 .setDescription('get a list of all source languages from DeepL'))
-//             .addSubcommand(subCommand => subCommand
-//                 .setName('target_list')
-//                 .setDescription('get a list of all target languages from DeepL'))),
-//
-//     async execute(interaction) {
-//         await interaction.deferReply();
-//         const translator = new deepl.Translator(DeepLToken);
-//
-//         const subCommandGroup = interaction.options.getSubcommandGroup();
-//         const subCommand = interaction.options.getSubcommand();
-//
-//         if (subCommandGroup === 'languages') {
-//             let text ="";
-//             if (subCommand === 'source_list') {
-//                 translator.getTargetLanguages().then(results =>{
-//                     results.forEach(result => {
-//                         text += `Language: ${result.name} - Code: ${result.code}.\n`;
-//                     });
-//                     interaction.editReply({ephemeral: false, content: text});
-//                 })
-//             }
-//             else if (subCommand === 'target_list') {
-//                 translator.getTargetLanguages().then(results =>{
-//                     results.forEach(result => {
-//                         text += `Language: ${result.name} - Code: ${result.code} - Formality: ${result.supportsFormality}.\n`;
-//                     });
-//                     interaction.editReply({ephemeral: false, content: text});
-//                 })
-//             }
-//             else{interaction.editReply({content: 'Invalid subcommand'});}
-//         }else {
-//             if (subCommand === 'translate') {
-//                 const text = interaction.options.get('text').value;
-//                 const sourceOption = interaction.options.get('source');
-//                 const source = sourceOption? sourceOption.value : null;
-//                 const target = interaction.options.get('target').value;
-//                 const formalityOption = interaction.options.get('formality');
-//                 let formality = formalityOption ? formalityOption.value : null;
-//
-//                 switch (formality) {
-//                     case 'formal':
-//                         formality = { formality: 'more',};
-//                         break;
-//                     case 'informal':
-//                         formality = { formality: 'less',};
-//                         break;
-//                     default:
-//                         formality = {}
-//                 }
-//
-//                 const result = await translator.translateText(text, source, target, formality);
-//                 interaction.editReply({content:'> '+result.text});
-//             }
-//             else if (subCommand === 'quota') {
-//                 translator.getUsage().then(usage =>{
-//                     const count = usage.character.count.toLocaleString();
-//                     const limit = usage.character.limit.toLocaleString();
-//                     interaction.editReply(`You have used ${count}/${limit} characters.`);
-//                 });
-//             }
-//             else{interaction.editReply({content: 'Invalid subcommand'});}
-//         }
-//     }
-// };
+const fs = require('fs');
+const path = require('path');
+const deepl = require('deepl-node');
+const { DeepLToken } = require('../../config.json');
+const { SlashCommandBuilder } = require('discord.js');
+const translator = new deepl.Translator(DeepLToken);
+
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('translation')
+        .setDescription('translation commands'),
+
+    options: [], // Will be populated dynamically below
+
+    async execute(interaction) {
+        await interaction.deferReply();
+
+        const subCommandGroup = interaction.options.getSubcommandGroup(false); // Optional
+        const subCommand = interaction.options.getSubcommand();
+
+        let subcommandFile;
+        if (subCommandGroup) {
+            subcommandFile = path.join(__dirname, 'subcommands', subCommandGroup, `${subCommand}.js`);
+        } else {
+            subcommandFile = path.join(__dirname, 'subcommands', `${subCommand}.js`);
+        }
+
+        if (fs.existsSync(subcommandFile)) {
+            const subcommand = require(subcommandFile);
+            await subcommand.execute(interaction, translator);
+        } else {
+            await interaction.editReply({ content: 'Invalid subcommand' });
+        }
+    }
+};
+
+// Helper to add specific subcommand options
+const addSubcommandOptions = (subcommand, builder) => {
+    switch (subcommand.name) {
+        case 'translate':
+            builder
+                .addStringOption(option => option
+                    .setName('text')
+                    .setDescription('The text to translate.')
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('target')
+                    .setDescription('The target language.')
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('source')
+                    .setDescription('The source language.')
+                    .setRequired(false))
+                .addStringOption(option => option
+                    .setName('formality')
+                    .setDescription('Choose the formality of the translation (formal/informal).')
+                    .setRequired(false));
+            break;
+
+        // Add other subcommand-specific options if needed
+        case 'quota':
+        case 'source_list':
+        case 'target_list':
+            break;
+
+        default:
+            console.warn(`No options specified for subcommand: ${subcommand.name}`);
+    }
+};
+
+// Load the subcommands and groups dynamically
+const subcommandsPath = path.join(__dirname, 'subcommands');
+
+// Load subcommands and subcommand groups dynamically
+fs.readdirSync(subcommandsPath).forEach(file => {
+    const filePath = path.join(subcommandsPath, file);
+
+    if (fs.statSync(filePath).isDirectory()) {
+        // It's a subcommand group (like 'languages')
+        const groupName = file;
+        const groupOptions = [];
+
+        fs.readdirSync(filePath).forEach(subcommandFile => {
+            if (subcommandFile.endsWith('.js')) {
+                const subcommand = require(path.join(filePath, subcommandFile));
+                const subcommandBuilder = new SlashCommandBuilder()
+                    .setName(subcommand.name)
+                    .setDescription(subcommand.description);
+
+                addSubcommandOptions(subcommand, subcommandBuilder); // Add specific options
+
+                groupOptions.push({
+                    name: subcommand.name,
+                    type: 'SUB_COMMAND',
+                    description: subcommand.description,
+                });
+            }
+        });
+
+        // Ensure that the argument passed to setName is a string
+        module.exports.data.addSubcommandGroup(group => {
+            group.setName(groupName)
+                .setDescription(`Group ${groupName} of subcommands`);
+
+            groupOptions.forEach(opt => {
+                group.addSubcommand(subcommand => subcommand
+                    .setName(String(opt.name)) // Ensure opt.name is a string
+                    .setDescription(opt.description)
+                );
+            });
+
+            return group;
+        });
+    } else if (file.endsWith('.js')) {
+        // It's a standalone subcommand (like 'translate' or 'quota')
+        const subCommand = require(filePath);
+        const subcommandBuilder = new SlashCommandBuilder()
+            .setName(subCommand.name)
+            .setDescription(subCommand.description);
+
+        addSubcommandOptions(subCommand, subcommandBuilder); // Add specific options
+
+        module.exports.data.addSubcommand(subcommand => subcommand
+            .setName(subCommand.name)
+            .setDescription(subCommand.description)
+        );
+    }
+});
