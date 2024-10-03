@@ -1,6 +1,6 @@
 module.exports = {
     name: 'source_list',
-    description: 'Get the current character usage of DeepL\'s API',
+    description: 'Get a list of all source languages from DeepL',
     async execute(interaction, translator) {
         let text ="";
         translator.getTargetLanguages().then(results =>{

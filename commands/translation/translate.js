@@ -37,7 +37,7 @@ module.exports = {
 // Helper to add specific subcommand options
 const addSubcommandOptions = (subcommand, builder) => {
     switch (subcommand.name) {
-        case 'translate':
+        case 'translations':
             builder
                 .addStringOption(option => option
                     .setName('text')

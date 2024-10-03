@@ -1,6 +1,6 @@
 module.exports = {
     name: 'translate',
-    description: 'Get the current character usage of DeepL\'s API',
+    description: 'Translate text to a target language',
     async execute(interaction, translator) {
         const text = interaction.options.get('text').value;
         const sourceOption = interaction.options.get('source');
