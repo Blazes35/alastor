@@ -1,9 +1,8 @@
 # Alastor
 
-Alastor est un bot Discord développé en utilisant la bibliothèque discord.js. Il offre diverses commandes de modération, utilitaires et de traduction.
+Alastor est un bot Discord fais pour répondre aux attentes d'un serveur entre amis, développé en utilisant la bibliothèque discord.js il permet de faire de la modération, de l'animation et aussi de l'utilitaire comme de la traduction. 
 
 ## Commandes
-
 ### Modération
 
 - `reaction-role` : Crée un message avec des rôles de réaction.
