@@ -8,15 +8,15 @@ Alastor est un bot Discord développé en utilisant la bibliothèque discord.js.
 
 - `reaction-role` : Crée un message avec des rôles de réaction.
 - `server` : Fournit des informations sur le serveur.
-- [timeout](http://_vscodecontentref_/1) : Met un utilisateur en timeout.
-- [user](http://_vscodecontentref_/2) : Fournit des informations sur l'utilisateur.
+- `timeout` : Met un utilisateur en timeout.
+- `user` : Fournit des informations sur l'utilisateur.
 
 ### Utilitaires
 
 - `bonk` : Envoie un sticker "bonk" à un utilisateur.
 - `full-reload` : Recharge toutes les commandes.
 - `info-command` : Fournit des informations sur une commande spécifique.
-- [logChannel](http://_vscodecontentref_/3) : Change le canal de log.
+- `logChannel` : Change le canal de log.
 - `ping` : Répond avec "Pong!".
 - `reload` : Recharge une commande spécifique.
 
