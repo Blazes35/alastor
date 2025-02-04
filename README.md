@@ -47,5 +47,5 @@ Alastor est un bot Discord conçu pour enrichir l'expérience des serveurs entre
 
 ## Licence
 
-Le code source de ce projet est mis à disposition sous la **Licence de Réutilisation du Code (URC) Version 1.0**. Cette licence autorise la réutilisation et la modification du code source à des fins personnelles, d'étude ou de recherche, **mais interdit la réutilisation du logiciel en tant que produit final**.  
+Le code source de ce projet est mis à disposition sous la **MIT License**.
 Pour plus de détails, veuillez consulter le fichier [LICENSE](LICENSE).
